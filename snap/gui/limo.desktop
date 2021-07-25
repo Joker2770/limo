@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.0.1_20210725
+Encoding=UTF-8
+Name=limo
+Comment=A simple Linux system resources monitor.
+Exec=limo
+Terminal=false
+Type=Application
+Categories=Graphics
+Icon=${SNAP}/meta/gui/icon.png
