@@ -19,7 +19,7 @@ parts:
     plugin: make
     source: https://github.com/Joker2770/limo.git
     source-type: git
-    source-branch: master
+    source-branch: main
     source-depth: 1
     # source: ../
     artifacts: [limo]
