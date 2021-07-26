@@ -12,7 +12,7 @@ base: core20
 
 apps:
   limo:
-    command: /usr/local/bin/limo
+    command: usr/local/bin/limo
     extensions: [gnome-3-38]
     plugs:
       - desktop
