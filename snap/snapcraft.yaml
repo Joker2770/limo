@@ -12,6 +12,11 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 apps:
   limo:
     command: limo
+    plugs:
+      - desktop
+      - desktop-legacy
+      - wayland
+      - unity7
 
 parts:
   limo:
