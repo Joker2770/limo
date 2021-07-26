@@ -8,10 +8,12 @@ description: |
 
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
+base: core20
 
 apps:
   limo:
     command: limo
+    extensions: [gnome-3-38]
     plugs:
       - desktop
       - desktop-legacy
@@ -27,7 +29,7 @@ parts:
     source-branch: main
     source-depth: 1
     # source: ../
-    artifacts: [limo]
+    # artifacts: [limo]
     build-packages:
       - gcc
       - make
@@ -35,5 +37,8 @@ parts:
   
     stage-packages:
       - libgtk-3-0
-      
+
+    # build-environment:
+      # - GDK_PIXBUF_MODULE_FILE: /snap/gnome-3-38-2004-sdk/current/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-current/loaders.cache
+
 

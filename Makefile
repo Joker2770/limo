@@ -1,3 +1,7 @@
+prefix = /usr/local
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+
 #OBJS specifies which files to compile as part of the project
 OBJS = state_monitor.c
 
@@ -17,6 +21,13 @@ OBJ_NAME = limo
 #This is the target that compiles our executable
 all : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+
+install:
+	install -d $(bindir)
+	install -m 0755 $(OBJ_NAME)  $(bindir)
+
+uninstall:
+	rm $(bindir)/$(OBJ_NAME)
 
 clean:
 	rm -rf $(OBJ_NAME)
