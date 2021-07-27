@@ -6,7 +6,6 @@
  ************************************************************************/
 
 #include <gtk/gtk.h>
-
 #include <string.h>
 
 GtkWidget *window;
@@ -15,9 +14,9 @@ long long i = 0, tt = 0, tt0 = 0, idle = 0, idle0 = 0, r1 = 0, t1 = 0, r0 = 0, t
 
 char *uptime(char *hms)
 {
-    int ss, h, m, s;
-    float tt, it;
-    FILE *fp;
+    int ss = 0, h = 0, m = 0, s = 0;
+    float tt = 0.0f, it = 0.0f;
+    FILE *fp = NULL;
     fp = fopen("/proc/uptime", "r");
     fscanf(fp, "%f %f", &tt, &it);
     fclose(fp);
@@ -31,8 +30,8 @@ char *uptime(char *hms)
 
 void meminfo()
 {
-    FILE *fp;
-    char cmt[40], cmf[40], a[40], b[40];
+    FILE *fp = NULL;
+    char cmt[40] = "", cmf[40] = "", a[40] = "", b[40] = "";
     fp = fopen("/proc/meminfo", "r");
     fgets(cmt, sizeof(cmt), fp);
     fgets(cmf, sizeof(cmf), fp);
@@ -44,12 +43,12 @@ void meminfo()
 
 char *cpustat(char *cpusage)
 {
-    FILE *fp;
-    char ch[100], cpu[10];
+    FILE *fp = NULL;
+    char ch[100] = "", cpu[10] = "";
     fp = fopen("/proc/stat", "r");
     fgets(ch, sizeof(ch), fp);
     fclose(fp);
-    long user, nice, sys, idle, iowait, irq, softirq, usage = 0;
+    long user = 0L, nice = 0L, sys = 0L, idle = 0L, iowait = 0L, irq = 0L, softirq = 0L, usage = 0L;
     sscanf(ch, "%s%ld%ld%ld%ld%ld%ld%ld", cpu, &user, &nice, &sys, &idle, &iowait, &irq, &softirq);
     tt = user + nice + sys + idle + iowait + irq + softirq;
     if (i > 0)
@@ -64,9 +63,9 @@ char *cpustat(char *cpusage)
 
 void netdev()
 {
-    FILE *fp;
-    char ch[150], ch4[150], itf[10];
-    int r2, r3, r4, r5, r6, r7, r8, t2, t3, t4, t5, t6, t7, t8;
+    FILE *fp = NULL;
+    char ch[150] = "", ch4[150] = "", itf[10] = "";
+    int r2 = 0, r3 = 0, r4 = 0, r5 = 0, r6 = 0, r7 = 0, r8 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0;
     fp = fopen("/proc/net/dev", "r");
     fgets(ch, sizeof(ch), fp);
     fgets(ch, sizeof(ch), fp);
@@ -80,7 +79,7 @@ void netdev()
 
 char *B2G(long long b)
 {
-    static char g[10];
+    static char g[10] = "";
     if (b > 999999999)
     {
         sprintf(g, "%.2fGB", (float)b / 1073741824);
@@ -108,8 +107,8 @@ char *B2G(long long b)
 
 gint settime(gpointer data)
 {
-    char title[128], label1[1024], hms[10], mems[100], cpusage[20], cr[10], ct[10], crs[10], cts[10], cmu[10], cmt[10];
-    int rs, ts, memusage = 0;
+    char title[128] = "", label1[1024] = "", hms[10] = "", mems[100] = "", cpusage[20] = "", cr[10] = "", ct[10] = "", crs[10] = "", cts[10] = "", cmu[10] = "", cmt[10] = "";
+    int rs = 0, ts = 0, memusage = 0;
     uptime(hms);
     meminfo();
     cpustat(cpusage);
@@ -141,16 +140,17 @@ int main(int argc, char *argv[])
     gtk_window_set_title(GTK_WINDOW(window), "CMDU");
     //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);
     gtk_window_set_keep_above(GTK_WINDOW(window), TRUE);
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+
     label = gtk_label_new("");
     //gtk_widget_set_opacity(GTK_WIDGET(label), 0.7);
-    //gtk_misc_set_alignment(GTK_MISC(label),0,0);
-    //gtk_misc_set_padding(GTK_MISC(label),5,10);
     gtk_label_set_text(GTK_LABEL(label), "Duration:\nCPU:\nMem:\nDown:\nUp:");
-    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_container_add(GTK_CONTAINER(window), label);
+
     gint s = g_timeout_add(1000, settime, NULL);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(window);
     gtk_main();
+
     return 0;
 }
