@@ -134,7 +134,11 @@ gint settime(gpointer data)
 
 int main(int argc, char *argv[])
 {
+    GdkColor color_fg, color_bg;
+    gdk_color_parse ("black", &color_fg);
+    gdk_color_parse ("lightblue", &color_bg);
     gtk_init(&argc, &argv);
+
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 200, 100);
     gtk_window_set_title(GTK_WINDOW(window), "CMDU");
@@ -144,6 +148,8 @@ int main(int argc, char *argv[])
 
     label = gtk_label_new("");
     //gtk_widget_set_opacity(GTK_WIDGET(label), 0.7);
+    gtk_widget_modify_fg (GTK_WIDGET(label), GTK_STATE_NORMAL, &color_fg);
+    gtk_widget_modify_bg (GTK_WIDGET(label), GTK_STATE_NORMAL, &color_bg);
     gtk_label_set_text(GTK_LABEL(label), "Duration:\nCPU:\nMem:\nDown:\nUp:");
     gtk_container_add(GTK_CONTAINER(window), label);
 
