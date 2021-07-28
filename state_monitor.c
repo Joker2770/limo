@@ -63,18 +63,24 @@ char *cpustat(char *cpusage)
 
 void netdev()
 {
+    r1 = 0L;
+    t1 = 0L;
     FILE *fp = NULL;
-    char ch[150] = "", ch4[150] = "", itf[10] = "";
+    char ch[150] = "", ch3[256] = "", itf[10] = "";
+    long long r1_t = 0, t1_t = 0;
     int r2 = 0, r3 = 0, r4 = 0, r5 = 0, r6 = 0, r7 = 0, r8 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0;
     fp = fopen("/proc/net/dev", "r");
     fgets(ch, sizeof(ch), fp);
     fgets(ch, sizeof(ch), fp);
-    fgets(ch, sizeof(ch), fp);
-    fgets(ch4, sizeof(ch4), fp);
+    for(;NULL != fgets(ch3, sizeof(ch3), fp);)
+    {
+        //printf("%s",ch3);
+        sscanf(ch3, "%s%lld%d%d%d%d%d%d%d%lld%d%d%d%d%d%d%d", itf, &r1_t, &r2, &r3, &r4, &r5, &r6, &r7, &r8, &t1_t, &t2, &t3, &t4, &t5, &t6, &t7, &t8);
+        //printf("%lld,%lld\n\n",r1_t,t1_t);
+        r1 += r1_t;
+        t1 += t1_t;
+    }
     fclose(fp);
-    //printf("%s\n",ch4);
-    sscanf(ch4, "%s%lld%d%d%d%d%d%d%d%lld%d%d%d%d%d%d%d", itf, &r1, &r2, &r3, &r4, &r5, &r6, &r7, &r8, &t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8);
-    //printf("%d,%d\n",r1,t1);
 }
 
 char *B2G(long long b)
@@ -144,7 +150,7 @@ int main(int argc, char *argv[])
     gtk_window_set_title(GTK_WINDOW(window), "CMDU");
     //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);
     gtk_window_set_keep_above(GTK_WINDOW(window), TRUE);
-    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_NONE);
 
     label = gtk_label_new("");
     //gtk_widget_set_opacity(GTK_WIDGET(label), 0.7);
