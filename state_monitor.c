@@ -8,8 +8,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-GtkWidget *window;
-GtkWidget *label;
+GtkWidget *window = NULL;
+GtkWidget *label = NULL;
 long long i = 0, tt = 0, tt0 = 0, idle = 0, idle0 = 0, r1 = 0, t1 = 0, r0 = 0, t0 = 0, mu = 0, mt = 0, mf = 0;
 
 char *uptime(char *hms)
@@ -140,9 +140,9 @@ gint settime(gpointer data)
 
 int main(int argc, char *argv[])
 {
-    GdkColor color_fg, color_bg;
-    gdk_color_parse ("black", &color_fg);
-    gdk_color_parse ("lightblue", &color_bg);
+    GdkRGBA rgba_fg, rgba_bg;
+    gdk_rgba_parse(&rgba_fg, "#000000");
+    gdk_rgba_parse(&rgba_bg, "#add8e6");
     gtk_init(&argc, &argv);
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -154,8 +154,8 @@ int main(int argc, char *argv[])
 
     label = gtk_label_new("");
     //gtk_widget_set_opacity(GTK_WIDGET(label), 0.7);
-    gtk_widget_modify_fg (GTK_WIDGET(label), GTK_STATE_NORMAL, &color_fg);
-    gtk_widget_modify_bg (GTK_WIDGET(label), GTK_STATE_NORMAL, &color_bg);
+    gtk_widget_override_color(GTK_WIDGET(label), GTK_STATE_NORMAL, &rgba_fg);
+    gtk_widget_override_background_color(GTK_WIDGET(label), GTK_STATE_NORMAL, &rgba_bg);
     gtk_label_set_text(GTK_LABEL(label), "Duration:\nCPU:\nMem:\nDown:\nUp:");
     gtk_container_add(GTK_CONTAINER(window), label);
 
@@ -163,6 +163,9 @@ int main(int argc, char *argv[])
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(window);
     gtk_main();
+
+    gdk_rgba_free(&rgba_fg);
+    gdk_rgba_free(&rgba_bg);
 
     return 0;
 }
