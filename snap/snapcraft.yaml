@@ -24,6 +24,10 @@ plugs: # plugs for theming, font settings, cursor and to use gtk3 file chooser
     target: $SNAP/data-dir/sounds
     default-provider: gtk-common-themes:sounds-themes
 
+layout:
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+
 apps:
   limo:
     command: limo
