@@ -36,7 +36,7 @@ SOFTWARE.
 
 GtkWidget *window = NULL;
 GtkWidget *label = NULL;
-long long i = 0, tt = 0, tt0 = 0, idle = 0, idle0 = 0, r1 = 0, t1 = 0, r0 = 0, t0 = 0, mu = 0, mt = 0, mf = 0;
+long long tt = -1, tt0 = -2, idle = 0, idle0 = 0, r1 = 0, t1 = 0, r0 = 0, t0 = 0, mu = 0, mt = -1, mf = 0;
 
 char *uptime(char *hms)
 {
@@ -77,13 +77,13 @@ char *cpustat(char *cpusage)
     long user = 0L, nice = 0L, sys = 0L, idle = 0L, iowait = 0L, irq = 0L, softirq = 0L, usage = 0L;
     sscanf(ch, "%s%ld%ld%ld%ld%ld%ld%ld", cpu, &user, &nice, &sys, &idle, &iowait, &irq, &softirq);
     tt = user + nice + sys + idle + iowait + irq + softirq;
-    if (i > 0)
+    if (tt != tt0)
         usage = ((tt - tt0) - (idle - idle0)) * 100 / (tt - tt0);
-    //printf("%s,%d,%d,%d,%d,%d,%d,%d\n",cpu,user,nice,sys,idle,iowait,irq,softirq);
+    // printf("%s,%d,%d,%d,%d,%d,%d,%d\n",cpu,user,nice,sys,idle,iowait,irq,softirq);
     sprintf(cpusage, "%ld%%", usage);
     idle0 = idle;
     tt0 = tt;
-    i++;
+
     return cpusage;
 }
 
@@ -139,8 +139,8 @@ char *B2G(long long b)
 
 gint settime(gpointer data)
 {
-    char title[128] = "", label1[1024] = "", hms[10] = "", mems[100] = "", cpusage[20] = "", cr[10] = "", ct[10] = "", crs[10] = "", cts[10] = "", cmu[10] = "", cmt[10] = "";
-    int rs = 0, ts = 0, memusage = 0;
+    char title[128] = "", label1[1024] = "", hms[10] = "", cpusage[20] = "", cr[10] = "", ct[10] = "", crs[10] = "", cts[10] = "", cmu[10] = "", cmt[10] = "";
+    long long rs = 0, ts = 0, memusage = 0;
     uptime(hms);
     meminfo();
     cpustat(cpusage);
@@ -148,7 +148,8 @@ gint settime(gpointer data)
     rs = r1 - r0;
     ts = t1 - t0;
     mu = mt - mf;
-    memusage = mu * 100 / mt;
+    if (mt != 0)
+        memusage = mu * 100 / mt;
     strcpy(cmt, B2G(mt * 1024));
     strcpy(cmu, B2G(mu * 1024));
     strcpy(cr, B2G(r1));
@@ -185,7 +186,7 @@ int main(int argc, char *argv[])
     gtk_label_set_text(GTK_LABEL(label), "Duration:\nCPU:\nMem:\nDown:\nUp:");
     gtk_container_add(GTK_CONTAINER(window), label);
 
-    gint s = g_timeout_add(1000, settime, NULL);
+    g_timeout_add(1000, settime, NULL);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_widget_show_all(window);
     gtk_main();
