@@ -11,8 +11,8 @@ add_definitions (${GTK3_CFLAGS_OTHER})
 set(CMAKE_C_FLAGS "-g -static-libgcc -static-libstdc++")
 set(CMAKE_CXX_FLAGS "-g -static-libgcc -static-libstdc++")
 
-set(IncludePath ${CMAKE_CURRENT_SOURCE_DIR}/)
-set(SrcPath "${CMAKE_CURRENT_SOURCE_DIR}/")
+set(IncludePath ${CMAKE_SOURCE_DIR}/)
+set(SrcPath "${CMAKE_SOURCE_DIR}/")
 
 # Sources
 include_directories(${IncludePath})

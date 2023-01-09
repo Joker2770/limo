@@ -9,7 +9,7 @@
 
 MIT License
 
-Copyright (c) 2021-2022 Joker2770
+Copyright (c) 2021-2023 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -140,16 +140,16 @@ char *B2G(long long b)
 gint settime(gpointer data)
 {
     char title[128] = "", label1[1024] = "", hms[10] = "", cpusage[20] = "", cr[10] = "", ct[10] = "", crs[10] = "", cts[10] = "", cmu[10] = "", cmt[10] = "";
-    long long rs = 0, ts = 0, memusage = 0;
+    int rs = 0, ts = 0, memusage = 0;
     uptime(hms);
     meminfo();
     cpustat(cpusage);
     netdev();
-    rs = r1 - r0;
-    ts = t1 - t0;
+    rs = (int)(r1 - r0);
+    ts = (int)(t1 - t0);
     mu = mt - mf;
     if (mt != 0)
-        memusage = mu * 100 / mt;
+        memusage = (int)(mu * 100 / mt);
     strcpy(cmt, B2G(mt * 1024));
     strcpy(cmu, B2G(mu * 1024));
     strcpy(cr, B2G(r1));
